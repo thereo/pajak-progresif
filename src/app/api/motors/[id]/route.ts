@@ -1,13 +1,15 @@
 // /app/api/motors/[id]/route.ts
 import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const body = await request.json();
+
   const updated = await prisma.motor.update({
     where: { id: Number(params.id) },
     data: {
@@ -16,13 +18,14 @@ export async function PUT(
       nilai: Number(body.nilai),
     },
   });
-  return new Response(JSON.stringify(updated));
+
+  return NextResponse.json(updated);
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   await prisma.motor.delete({ where: { id: Number(params.id) } });
-  return new Response(null, { status: 204 });
+  return new NextResponse(null, { status: 204 });
 }
