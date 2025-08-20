@@ -204,10 +204,10 @@ export default function MotorPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold">Kelola Motor</h1>
-        <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           <button
             onClick={navigateToCalculator}
             className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 text-sm font-medium transition-colors"
@@ -253,73 +253,118 @@ export default function MotorPage() {
         </div>
       ) : (
         <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-medium text-gray-900">Nama Motor</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900">Tipe</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-900">Nilai (Rp)</th>
-                <th className="text-center py-3 px-4 font-medium text-gray-900">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
+          {/* Mobile Card View */}
+          <div className="block md:hidden">
+            <div className="divide-y divide-gray-200">
               {motors.map((motor) => (
-                <tr key={motor.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 font-medium text-gray-900">{motor.name}</td>
-                  <td className="py-3 px-4 text-gray-600">{motor.type}</td>
-                  <td className="py-3 px-4 text-right font-mono text-gray-900">
-                    {motor.nilai.toLocaleString('id-ID')}
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex justify-center space-x-3">
-                      <button
-                        onClick={() => openEdit(motor)}
-                        className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                        disabled={isDeleting === motor.id}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => setDeleteConfirm(motor)}
-                        className="text-red-600 hover:text-red-800 font-medium text-sm"
-                        disabled={isDeleting === motor.id}
-                      >
-                        {isDeleting === motor.id ? (
-                          <span className="flex items-center">
-                            <div className="animate-spin rounded-full h-3 w-3 border-b border-red-600 mr-1"></div>
-                            Hapus...
-                          </span>
-                        ) : (
-                          'Hapus'
-                        )}
-                      </button>
+                <div key={motor.id} className="p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-gray-900 truncate">{motor.name}</h3>
+                      <p className="text-sm text-gray-600 mt-1">{motor.type}</p>
+                      <p className="text-lg font-mono text-gray-900 mt-2">
+                        Rp {motor.nilai.toLocaleString('id-ID')}
+                      </p>
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                  <div className="flex justify-end space-x-3">
+                    <button
+                      onClick={() => openEdit(motor)}
+                      className="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-md font-medium text-sm transition-colors"
+                      disabled={isDeleting === motor.id}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => setDeleteConfirm(motor)}
+                      className="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-md font-medium text-sm transition-colors"
+                      disabled={isDeleting === motor.id}
+                    >
+                      {isDeleting === motor.id ? (
+                        <span className="flex items-center">
+                          <div className="animate-spin rounded-full h-3 w-3 border-b border-red-600 mr-1"></div>
+                          Hapus...
+                        </span>
+                      ) : (
+                        'Hapus'
+                      )}
+                    </button>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">Nama Motor</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900">Tipe</th>
+                  <th className="text-right py-3 px-4 font-medium text-gray-900">Nilai (Rp)</th>
+                  <th className="text-center py-3 px-4 font-medium text-gray-900">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {motors.map((motor) => (
+                  <tr key={motor.id} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 font-medium text-gray-900">{motor.name}</td>
+                    <td className="py-3 px-4 text-gray-600">{motor.type}</td>
+                    <td className="py-3 px-4 text-right font-mono text-gray-900">
+                      {motor.nilai.toLocaleString('id-ID')}
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex justify-center space-x-3">
+                        <button
+                          onClick={() => openEdit(motor)}
+                          className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                          disabled={isDeleting === motor.id}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteConfirm(motor)}
+                          className="text-red-600 hover:text-red-800 font-medium text-sm"
+                          disabled={isDeleting === motor.id}
+                        >
+                          {isDeleting === motor.id ? (
+                            <span className="flex items-center">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b border-red-600 mr-1"></div>
+                              Hapus...
+                            </span>
+                          ) : (
+                            'Hapus'
+                          )}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* Add/Edit Modal */}
       {openModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-md">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
                 {editMotor ? "Edit Motor" : "Tambah Motor Baru"}
               </h2>
             </div>
             
-            <div className="px-6 py-4 space-y-4">
+            <div className="px-4 sm:px-6 py-4 space-y-4">
               <div>
                 <label htmlFor="motor-name" className="block text-sm font-medium text-gray-700 mb-1">
                   Nama Motor
                 </label>
                 <input
                   id="motor-name"
-                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent ${
+                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent text-base ${
                     formErrors.name ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Contoh: Honda Vario 125"
@@ -338,7 +383,7 @@ export default function MotorPage() {
                 </label>
                 <input
                   id="motor-type"
-                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent ${
+                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent text-base ${
                     formErrors.type ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Contoh: Scooter Matic"
@@ -358,9 +403,10 @@ export default function MotorPage() {
                 <input
                   id="motor-nilai"
                   type="number"
+                  inputMode="numeric"
                   min="1"
                   max="1000000000"
-                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent ${
+                  className={`border rounded-md w-full p-3 focus:ring-2 focus:ring-black focus:border-transparent text-base ${
                     formErrors.nilai ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Contoh: 18000000"
@@ -379,21 +425,21 @@ export default function MotorPage() {
               </div>
             </div>
 
-            <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3">
               <button
-                className="border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md px-4 py-2 font-medium transition-colors"
+                className="w-full sm:w-auto border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md px-4 py-2 font-medium transition-colors order-2 sm:order-1"
                 onClick={closeModal}
                 disabled={isSaving}
               >
                 Batal
               </button>
               <button
-                className="bg-black hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-md px-6 py-2 font-medium transition-colors"
+                className="w-full sm:w-auto bg-black hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-md px-6 py-2 font-medium transition-colors order-1 sm:order-2"
                 onClick={saveMotor}
                 disabled={isSaving}
               >
                 {isSaving ? (
-                  <span className="flex items-center">
+                  <span className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     {editMotor ? 'Mengupdate...' : 'Menyimpan...'}
                   </span>
@@ -410,29 +456,29 @@ export default function MotorPage() {
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg w-full max-w-sm">
-            <div className="px-6 py-4">
+            <div className="px-4 sm:px-6 py-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Konfirmasi Hapus
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 text-sm sm:text-base">
                 Apakah Anda yakin ingin menghapus motor <strong>{deleteConfirm.name}</strong>? 
                 Tindakan ini tidak dapat dibatalkan.
               </p>
-              <div className="flex justify-end space-x-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
-                  className="border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md px-4 py-2 font-medium transition-colors"
+                  className="w-full sm:w-auto border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md px-4 py-2 font-medium transition-colors order-2 sm:order-1"
                   disabled={isDeleting === deleteConfirm.id}
                 >
                   Batal
                 </button>
                 <button
                   onClick={() => deleteMotor(deleteConfirm)}
-                  className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white rounded-md px-4 py-2 font-medium transition-colors"
+                  className="w-full sm:w-auto bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white rounded-md px-4 py-2 font-medium transition-colors order-1 sm:order-2"
                   disabled={isDeleting === deleteConfirm.id}
                 >
                   {isDeleting === deleteConfirm.id ? (
-                    <span className="flex items-center">
+                    <span className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       Menghapus...
                     </span>
