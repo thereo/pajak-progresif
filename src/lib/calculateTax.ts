@@ -1,3 +1,26 @@
+import { PrismaClient } from '@prisma/client';
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
+// Input sanitization utilities
+export function sanitizeString(input: string): string {
+  return input.trim().replace(/[<>]/g, '');
+}
+
+export function sanitizeNumber(input: string | number): number {
+  const num =
+    typeof input === 'string'
+      ? parseFloat(input.replace(/[^0-9.-]/g, ''))
+      : input;
+  return isNaN(num) ? 0 : num;
+}
+
 export interface TaxCalculation {
   nilaiJual: number;
   bbnkb: number;

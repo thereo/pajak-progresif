@@ -15,7 +15,10 @@ datasource db {
 
 model Motor {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   type  String
   nilai Int
+  
+  @@index([name(sort: Asc)])
+  @@index([type(sort: Asc)])
 }
