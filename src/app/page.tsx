@@ -1,13 +1,15 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { calculateTax, TaxCalculation } from '@/lib/calculateTax';
-import Link from 'next/link';
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import TaxInfoPanel from '@/components/TaxInfoPanel';
 import TaxForm from '@/components/TaxForm';
 import TaxResult from '@/components/TaxResult';
 import Footer from '@/components/Footer';
 import ScreenReaderAnnouncement from '@/components/ScreenReaderAnnouncement';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface Motor {
   id: number;
@@ -26,8 +28,10 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const navigateToMotorManagement = () => {
-    window.location.href = '/motor';
+    router.push('/motor');
   };
 
   const pageRef = useKeyboardNavigation<HTMLDivElement>(
@@ -109,28 +113,28 @@ export default function Page() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center max-w-sm w-full">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black dark:border-white mx-auto mb-4"></div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        <Card className="max-w-sm w-full shadow-lg">
+          <CardContent className="p-8 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <h2 className="text-lg font-semibold text-foreground mb-2">
               Memuat Data Motor
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Mohon tunggu sebentar, sedang mengambil data motor Anda...
             </p>
             <div className="mt-6 flex justify-center space-x-1">
-              <div className="h-2 w-2 bg-gray-300 rounded-full animate-pulse"></div>
+              <div className="h-2 w-2 bg-muted rounded-full animate-pulse"></div>
               <div
-                className="h-2 w-2 bg-gray-300 rounded-full animate-pulse"
+                className="h-2 w-2 bg-muted rounded-full animate-pulse"
                 style={{ animationDelay: '0.2s' }}
               ></div>
               <div
-                className="h-2 w-2 bg-gray-300 rounded-full animate-pulse"
+                className="h-2 w-2 bg-muted rounded-full animate-pulse"
                 style={{ animationDelay: '0.4s' }}
               ></div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -147,15 +151,10 @@ export default function Page() {
             Kalkulator pajak progresif untuk kendaraan bermotor di DKI Jakarta
           </p>
         </div>
-        <Link
-          href="/motor"
-          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg px-4 py-3 text-sm font-medium transition-colors touch-manipulation min-h-[44px] flex items-center justify-center self-start"
-          onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              navigateToMotorManagement();
-            }
-          }}
+        <Button
+          type="button"
+          onClick={navigateToMotorManagement}
+          className="self-start min-h-[44px] px-4 py-3 text-sm font-medium"
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -172,7 +171,7 @@ export default function Page() {
             />
           </svg>
           Kelola Motor
-        </Link>
+        </Button>
       </div>
 
       <TaxInfoPanel />
@@ -212,16 +211,17 @@ export default function Page() {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             Belum Ada Data Motor
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-sm mx-auto">
             Tambahkan data motor terlebih dahulu untuk dapat menghitung pajak
             progresif.
           </p>
-          <Link
-            href="/motor"
-            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg px-6 py-3 text-sm font-medium transition-colors touch-manipulation min-h-[44px] inline-flex items-center justify-center"
+          <Button
+            type="button"
+            onClick={navigateToMotorManagement}
+            className="px-6 py-3 text-sm font-medium min-h-[44px] inline-flex items-center justify-center"
           >
             <svg
               className="w-4 h-4 mr-2"
@@ -238,7 +238,7 @@ export default function Page() {
               />
             </svg>
             Tambah Motor Baru
-          </Link>
+          </Button>
         </div>
       )}
 

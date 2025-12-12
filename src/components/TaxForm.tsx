@@ -1,5 +1,9 @@
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import { TaxCalculation } from '@/lib/calculateTax';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface Motor {
   id: number;
@@ -45,44 +49,41 @@ export default function TaxForm({
   return (
     <>
       {error && (
-        <div
-          className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-4 rounded-xl mb-4 flex items-start justify-between shadow-sm"
-          role="alert"
-          aria-live="polite"
+        <Alert
+          variant="destructive"
+          className="mb-4 flex items-start justify-between gap-3"
         >
-          <div className="flex items-start flex-1 min-w-0">
-            <div className="flex-shrink-0 mr-3 mt-0.5">
-              <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-red-600 dark:text-red-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="mt-0.5">
+              <svg
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
-                Terjadi Kesalahan
-              </h3>
-              <p className="text-sm text-red-700 dark:text-red-300 break-words">
+              <AlertTitle>Terjadi Kesalahan</AlertTitle>
+              <AlertDescription className="break-words">
                 {error}
-              </p>
+              </AlertDescription>
             </div>
           </div>
-          <button
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
             onClick={() => setError(null)}
-            className="ml-4 flex-shrink-0 p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-900 transition-colors"
             aria-label="Tutup pesan error"
           >
             <svg
-              className="w-5 h-5 text-red-600 dark:text-red-400"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -95,8 +96,8 @@ export default function TaxForm({
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
-        </div>
+          </Button>
+        </Alert>
       )}
 
       <form
@@ -106,15 +107,12 @@ export default function TaxForm({
         aria-label="Formulir Perhitungan Pajak Motor"
       >
         <div>
-          <label
-            htmlFor="motor-select"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <Label htmlFor="motor-select" className="mb-2">
             Pilih Motor{' '}
             <span className="text-red-500" aria-label="wajib diisi">
               *
             </span>
-          </label>
+          </Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
@@ -193,15 +191,12 @@ export default function TaxForm({
         </div>
 
         <div>
-          <label
-            htmlFor="ownership-input"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <Label htmlFor="ownership-input" className="mb-2">
             Kepemilikan Ke-{' '}
             <span className="text-red-500" aria-label="wajib diisi">
               *
             </span>
-          </label>
+          </Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
@@ -219,14 +214,14 @@ export default function TaxForm({
                 />
               </svg>
             </div>
-            <input
+            <Input
               id="ownership-input"
               type="number"
               min={1}
               max={10}
               value={ownership}
               onChange={e => setOwnership(Number(e.target.value))}
-              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg w-full pl-10 pr-3 py-3 text-base focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent touch-manipulation"
+              className="pl-10"
               placeholder="Masukkan urutan kepemilikan (1-10)"
               aria-describedby="ownership-help"
               aria-required="true"
@@ -257,10 +252,10 @@ export default function TaxForm({
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <button
+          <Button
             type="submit"
             disabled={!motorId || ownership < 1 || isCalculating}
-            className="flex-1 bg-black hover:bg-gray-800 active:bg-gray-900 dark:bg-white dark:hover:bg-gray-200 dark:active:bg-gray-300 dark:text-black disabled:bg-gray-400 disabled:cursor-not-allowed text-white dark:text-black rounded-lg py-3 font-medium transition-colors touch-manipulation min-h-[44px] flex items-center justify-center"
+            className="flex-1 min-h-[44px] flex items-center justify-center"
             aria-describedby="submit-help"
           >
             {isCalculating ? (
@@ -290,13 +285,14 @@ export default function TaxForm({
                 Hitung Pajak
               </>
             )}
-          </button>
+          </Button>
 
           {(result || error) && (
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={onReset}
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 active:bg-gray-100 dark:active:bg-gray-700 rounded-lg font-medium transition-colors touch-manipulation min-h-[44px] flex items-center justify-center"
+              className="min-h-[44px] flex items-center justify-center"
               aria-label="Reset formulir dan hapus hasil perhitungan"
             >
               <svg
@@ -314,7 +310,7 @@ export default function TaxForm({
                 />
               </svg>
               Reset
-            </button>
+            </Button>
           )}
         </div>
 
